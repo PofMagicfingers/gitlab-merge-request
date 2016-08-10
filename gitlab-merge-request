@@ -1,7 +1,7 @@
 #!/usr/bin/env ruby
 
 # setup: gem install gitlab git
-# usage: gitlab-merge-request
+# usage: gitlab-merge-request [target_branch]
 # makes a merge request for the current branch that has already been pushed
 # to origin
 
@@ -61,9 +61,10 @@ def format_url(*args)
 end
 
 current_branch = @git.branches.find(&:current).name
+target_branch = ARGV.count > 0 && ARGV[0]
 project = cwd_gitlab_project
 
 merge_request =  Gitlab.create_merge_request project.id, write_merge_request_message,
-  :source_branch => current_branch, :target_branch => project.default_branch
+  :source_branch => current_branch, :target_branch => (target_branch || project.default_branch)
 
 puts format_url project.path_with_namespace, 'merge_requests' , merge_request.iid
