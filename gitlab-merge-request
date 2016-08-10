@@ -27,7 +27,7 @@ def find_gitlab_project(namespace, path)
     projects = Gitlab.group_projects(groups[0].id, {per_page: 1000})
   else
     #fallback: looking for projects with corresponding namespace
-    projects = Gitlab.projects({'search': namespace})
+    projects = Gitlab.projects({'search' => namespace})
 
     if not projects.any?
       raise sprintf("Unable find project with namespace '%s' and path '%s'", namespace, path)
